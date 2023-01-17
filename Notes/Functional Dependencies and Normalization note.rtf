@@ -1,0 +1,56 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2638
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 AmericanTypewriter-Bold;\f1\fnil\fcharset0 AmericanTypewriter;\f2\fnil\fcharset0 LucidaGrande;
+\f3\ftech\fcharset77 Symbol;}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;\red255\green255\blue255;\red0\green0\blue0;
+}
+{\*\expandedcolortbl;;\cssrgb\c20000\c20000\c20000;\cssrgb\c100000\c100000\c100000;\cssrgb\c0\c0\c0;
+}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{circle\}}{\leveltext\leveltemplateid1\'01\uc0\u9702 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12200\viewh19060\viewkind1
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 Normal Forms\
+\
+
+\f1\b0 - The higher the normal form, the less the redundancy \
+- Normalization:\
+  - process of turning a set of relations that are in lower normal forms into relations that are in higher normal forms.\
+	- by successively decomposing lower normal form relations.\
+\
+
+\f0\b BCNF\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\qj\partightenfactor0
+\ls1\ilvl0
+\f1\b0 \cf2 \cb3 {\listtext	
+\f2 \uc0\u9702 
+\f1 	}\expnd0\expndtw0\kerning0
+A table is in BCNF if every functional dependency X 
+\f3 \uc0\u8594 
+\f1  Y, X is the super key of the table.\cf0 \cb1 \
+\ls1\ilvl0\cf2 \cb3 \kerning1\expnd0\expndtw0 {\listtext	
+\f2 \uc0\u9702 
+\f1 	}\expnd0\expndtw0\kerning0
+For BCNF, the table should be in 3NF, and for every FD, LHS is super key.\cf0 \cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+
+\f0\b BCNF
+\f1\b0  Decomposition Algorithm\
+- Let X \'97> Y be the FD that violates BCNF in a relation schema R\
+- Replace R by two new relation schemas R1 and R2 constructed as follows\
+- Create R1 with all the attributes in X and in Y\
+- Create R2 from R by removing all attributes that are in Y and not in X\
+\
+\
+Dependency Preservation\
+- every FD of the initial schema can be recovered based on the FDs of the schemas in the decomposition.\
+\
+Non-additive join property\
+- also called lossless join property\
+- it must be possible that if we join the relations R1, \'85 , Rn, then we recover the initial relation R without generating additional tuples (also called \'93spurious tuples\'94).\
+\
+\
+ \
+\
+}

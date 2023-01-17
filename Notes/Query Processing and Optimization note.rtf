@@ -1,0 +1,171 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2638
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 AmericanTypewriter;\f1\fnil\fcharset0 AmericanTypewriter-Bold;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0\c84706\cname controlTextColor;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12500\viewh19240\viewkind1
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+Finding the cost in terms of page reads:\
+\
+Formula: pages(outer) + pages(outer) x pages(inner)\
+\
+\
+Finding the cost of sorting a relation:\
+\
+Formula: 2 x p x [log m (p)]\
+\
+\
+\
+merge phase = outer + inner\
+\
+\
+\
+
+\f1\b Query Representations\
+\
+
+\f0\b0  - it goes through multiple representations while being processed by DBMS.\
+	- an expression in the query language\
+	- parse tree / abstract syntax tree(AST)\
+	- logical plan\
+	- physical plan\
+	- compiled program\
+\
+
+\f1\b Logical Plans\
+
+\f0\b0  - represented as an expressen in a logical algebra (such as the relational algebra).\
+ - can be visualized as a tree of logical operators.\
+\
+	- Logical Optimization\
+	    - an algebra expression may be rewritten into a semantically equivalent 	      expression. \
+	    - it may result in a more efficient query execution\
+\
+
+\f1\b Physical Plans\
+
+\f0\b0  - also called query execution plan (QEP)\
+ - represented as an expression in a physical algebra\
+	- operators are called physical operators\
+ - physical operators come with a specific algorithm e.g. nested loops join\
+ - physical operators are associated with a cost function\
+	- can be used to calculate the amount of resources needed for their execution.\
+\
+\
+Logical vs Physical Operators\
+ - they do not necessarily map directly into one another\
+\
+\
+\
+\
+\
+
+\f1\b Query Processing Steps\
+
+\f0\b0  - Parsing \'97> Query Validation \'97> View Resolution \'97> Optimization \'97> Plan Compilation \'97> Execution\
+\
+\
+Examples for Physical Operators:\
+	- table scan\
+	- sorting\
+	- duplicate elimination\
+	- nested loop join\
+	- sort-merge join\
+	- hash join\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\slleading30\partightenfactor0
+
+\fs26 \cf2 Table Scan\
+ - leaves of logical operator trees are tables\
+ - accessing them completely implies a sequential scan\
+ - combining the scan with the next operation in the plan is often better\
+ 	- Filtering also called selection\
+	- Projection\
+\
+Sorting\
+ - many physical operators require input to be sorted\
+ - the unsorted input may not fit into main memory\
+ - we need an external sorting algorithm\
+\
+External Merge Sort (Simple)\
+ - first, sort each file block internally\
+ - group these sorted blocks into pairs, for each pair merge its two blocks\
+ - next, each of these groups is merged with another group, resulting in groups of four blocks\
+ - and so on\
+ - the final group is the completely sorted file\
+ - this strategy uses 3 page buffers in main memroy\
+ - if more buffers are available, we should exploit them\
+\
+External Merge Sort\
+ - suppose m+1 buffers are available in main memory, and the input occupies p file blocks.\
+ - Maximum number of stages: log of m to p\
+ - Maximum number of blocks read and written. 2 x p x log of m to p\
+\
+\
+Duplicate Elimination (Option 1)\
+ - two steps:\
+	1 - sort input table on DISTINCT column(s)\
+		- can be skipped if already sorted\
+	2 - scan sorted table and each tuple only once\
+\
+ - advantage: generated output is sorted\
+ - disadvantage: cannot be pipelined\
+\
+Duplicate Elimination (Option 2)\
+ - scan the input and gradually populate an internal data structure that holds each unique tuple once\
+ - for each input table, check if it has already been seen\
+	- No: insert tuple into the data structure and output the tuple\
+	- Yes: skip to the next input tuple\
+ - Possible data structures:\
+	- Hash table \'97 might be faster, needs good hash function\
+	- Binary tree \'97 some cost for balancing, robust\
+\
+advantage: can be pipelined\
+disadvantage: does not sort output\
+\
+\
+Nested Loops Join (NLJ)\
+ - I/O cost: pages(R) + pages(R) x pages(S)\
+\
+  - Possible improvements of NLJ\
+	- Block nested loop join:\
+		- for the outer-loop relation, read multiple blocks per iteration (as many as free buffers in main memory)\
+	- Zig-zag join:\
+		- for the inner-loop relation, alternate between loading its blocks forward and backward\
+	- Index nested loop join:\
+		- if there is an index on the join column of one of the two relations, make it the inner relation and use the index instead of scanning the whole date file in every iteration.\
+\
+\
+\
+\
+\
+Sort-Merge join\
+ - it consists of two phases:\
+	- Sort phase:\
+		- sort both inputs on their respective join attributes\
+		- may need to use an external sorting algorithm\
+		- sorting may be skipped for inputs that are already sorted\
+	- Merge phase:\
+		- synchronously iterate over both (sorted) inputs\
+		- merge and output tuples that can be joined\
+		- caution if join values may appear multiple times\
+\
+ - Soft-Merge Join (Cost Estimation)\
+	 -I/O costs for sort phase:\
+		- 2 x pages(R) x log of pages(R) + 2 x pages(S) x log of pages(S)\
+\
+	- I/O costs for merge phase:\
+		- pages(R) + pages(S)\
+\
+\
+Hash Join\
+ - use join attributes as hash keys in both input tables\
+ - choose hash function for building hash tables with m buckets (where m is the number of page buffers available in main memory).\
+	- Partitioning phase\
+	- Probing phase\
+\
+ - I/O costs: \
+	- 2 x pages(R) + pages(S) + pages(R) + pages(S); \
+		 }

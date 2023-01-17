@@ -1,0 +1,221 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2638
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 AmericanTypewriter-Bold;\f1\fnil\fcharset0 AmericanTypewriter;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11900\viewh18940\viewkind1
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 Storage Hierarchy\
+\
+
+\f1\b0 - Primary storage: fast, accessible by CPU  e.g. CPU registers, High Speed cache, Central storage\
+\
+- Secondary storage: slow, inaccessible by CPU e.g. HDD or SSD, Tape and/or optical media\
+\
+- Block is the unit of data transfer between disk and main memory. \
+\
+\
+
+\f0\b Files and Records\
+\
+
+\f1\b0 Blocking factor:\
+ - is the number of records per block (bfr)\
+\
+ - 
+\f0\b r
+\f1\b0  is the number of records in a file\
+ - 
+\f0\b R
+\f1\b0  is the size of a record\
+ - 
+\f0\b B
+\f1\b0  is the block size in bytes\
+\
+  	bfr = B / R\
+\
+ - Blocks needed to store the file: 	b = r / bfr\
+ - Space wasted per block:      		B - bfr * R\
+\
+\
+
+\f0\b Allocating File Blocks on Disk\
+\
+
+\f1\b0 Contiguous allocation: \
+ - file blocks allocated consecutively (one after another)\
+ - faster access to the blocks, but expanding is difficult.\
+\
+Linked allocation:\
+ - each file block contains a pointer to the next one.\
+ - every file block can be at some random locations. \
+ - expanding the file is easy, but reading is slower. \
+\
+Linked clusters allocation:\
+ - hybrid of the linked and contiguous allocation.\
+ - i.e. linked clusters of consecutive blocks\
+\
+Indexed allocation:\
+ - index blocks contain pointers to the actual file blocks.\
+\
+\
+\
+\
+\
+\
+
+\f0\b File Organization\
+\
+Heap Files:
+\f1\b0 \
+ - records are added to the end of the file.\
+ - adding a record is a cheap operation.\
+ - retrieving, removing and updating is expensive because it implies linear search.\
+\
+- Average case: b / 2  block accesses\
+- Worst case:     b block accesses\
+\
+\
+
+\f0\b Sorted Files:
+\f1\b0 \
+ - records ordered according to some field (e.g. ID number)\
+ - ordered record retrieval is cheap\
+ - retrieval based on any other field is still expensive\
+ - adding is expensive, but removing is less expensive. \
+\
+
+\f0\b Hash Files:
+\f1\b0 \
+ - File is logically split into buckets.\
+	- bucket consists of one or several contiguous disk blocks.\
+	- table convert bucket number into address of block\
+   - choose a field of the records to be the hash field\
+   - apply hash function h to the value x that record has in its hash field.\
+ - resulting hash value h(x) is the number of the bucket into which the record goes. \
+ - cheapest random retrieval while ordered record retrieval is expensive.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
+\f0\b Indexes (Secondary Access Methods)\
+\
+Index Files:\
+
+\f1\b0  - introduce secondary access methods.\
+ - goal is to speed up access time under specific conditions.\
+\
+ - there are different types of index structures:\
+	- Single-level ordered indexes (primary, secondary and clustering 	  indexes)\
+	- Multilevel indexes\
+	- Dynamic multilevel indexes (B+ trees)\
+\
+\
+\
+\
+\
+Primary Index:\
+ - Ordering field F is a key\
+ - an additional sorted file whose records contain two fields:\
+	
+\f0\b V 
+\f1\b0 - one of the values of F
+\f0\b \
+	P 
+\f1\b0 - pointer to a disk block of the data file\
+\
+\
+ - Index file is much smaller than the data file because:\
+ (a) number of index records < number of data records\
+ (b) index records smaller than data records\
+  \
+ - much smaller file \'97> binary search converges much faster.\
+\
+ - There is a cost of maintaining the index. (e.g. moving or updating the data file might affect the index file as well)\
+\
+\
+Clustering Index:\
+ - Ordering field F is not a key\
+ - an additional sorted file whose records contain two fields:\
+	
+\f0\b V 
+\f1\b0 - one of the values of F
+\f0\b \
+ 	P 
+\f1\b0 - pointer to a disk block of the data file\
+\
+ - Index file also smaller here, but not as much as for a primary index\
+	- number of index records <= number of data records\
+	- at least, index records smaller than data records \
+\
+\
+Secondary Index:\
+ - index on a non-ordering key field F\
+	- data file may be sorted or not\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0  - an additional sorted file whose records contain two fields:\
+	
+\f0\b V 
+\f1\b0 - one of the values of F
+\f0\b \
+ 	P 
+\f1\b0 - pointer to the data file block that contains the record with V for F\
+\
+ - one index record per data record\
+ - searching based on a value of F can now be done with a binary search in the index. \
+ - inverted file \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
+\f0\b Multilevel Indexes\
+
+\f1\b0  - is to build index on top of another index (first level, second level, etc)\
+ - works for primary, clustering and secondary index as long as the first-level index has a distinct index value for every entry. \
+\
+ - How many levels?\
+	- until the highest level fits into a single block\
+ \
+ - single block of highest level is the root node of the tree.\
+\
+ - How many block accesses to retrieve a random record?\
+	- number of index levels + 1\
+\
+ - insertion, deletion and update may be expensive because all the index levels are sorted files. \
+	
+\f0\b Solutions:\
+	 - 
+\f1\b0 overflow area + periodic reorganization\
+	 - dynamic multi-level indexes that leave some space in index blocks for new entries (e.g. B-trees and B+ trees)\
+\
+\
+\
+
+\f0\b B+ trees\
+
+\f1\b0  - very fast retrieval of a random record\
+ - number of block accesses to find relevant pointer to data file: \
+ - depth of tree + 1\
+\
+\
+Depth of a B+ tree\
+ - given that internal nodes must have at least p/2 children.\
+ - for a depth of d, the number N of leaf nodes is at least p/2 to power of d\
+ - worst case, d is at most log of p/2 to N\
+ - best case: log of p to N\
+\
+\
+ }

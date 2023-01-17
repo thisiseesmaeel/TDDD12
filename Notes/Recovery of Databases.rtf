@@ -1,0 +1,87 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2638
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 AmericanTypewriter;\f1\fnil\fcharset0 AmericanTypewriter-Bold;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12000\viewh18840\viewkind1
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Database Recovery is about the techniques to recover from system failures.\
+\
+Failures can be:\
+	- Transaction failures e.g. incorrect input, deadlock, incorrect synchronizations\
+	- System failures e.g. application error, operating system fault\
+	- Media failures e.g. RAM failure, disk head crash, power disruption\
+\
+\
+
+\f1\b Purpose 
+\f0\b0 of the database recovery:\
+ - is to bring the database into the most recent consistent state that existed prior to a failure. \
+ - 
+\f1\b Atomicity
+\f0\b0  and 
+\f1\b durability
+\f0\b0  of the ACID properties. \
+\
+\
+\
+
+\f1\b Logging\
+\
+- 
+\f0\b0 Append-only file\
+   - keep track of all write operations of all transactions\
+   - in the order in which these operations occured\
+\
+- Stored on disk\
+   - persistent except for disk or catastrophic failures\
+   - periodically backed up\
+\
+- Log buffer in main memory\
+   - holds log record that are appended to the log\
+   - occasionally whole buffer appended to end of log file on disk\
+\
+
+\f1\b Commit point:\
+
+\f0\b0 - a transaction reaches its commit point when:\
+  - all of its operations are executed \
+  - all of its log records are flushed to disk (where the last is the commit record)\
+\
+\
+Recovery with 
+\f1\b Deferred update\
+\
+
+\f0\b0 - updates of a transaction T are written to disk (but not necessarily immediately after)  after T has reached commit point. \
+- no need to undo changes of non-committed transactions\
+- need to redo the changes of committed transactions. \
+\
+
+\f1\b NO-UNDO/REDO recovery algorithm\
+
+\f0\b0 - create a list of committed transactions.\
+- REDO all the write-item operations of all the transactions in this list in the order in which they appear in the log. \
+\
+\
+
+\f1\b Checkpointing\
+- 
+\f0\b0 to save redo effort, use checkpoints. \
+\
+Recovery with 
+\f1\b Immediate Update 1\
+
+\f0\b0 - updates of a transaction may be written to disk before the transaction commits.\
+- additional requirement: all updates of a transaction T must be written to disk before the commit point of T\
+   - No need to redo changes of committed transactions\
+   - Need to undo changes of non-committed transactions. \
+\
+Recovery with 
+\f1\b Immediate Update 2\
+
+\f0\b0 - like immediate update 1 
+\f1\b without 
+\f0\b0 the additional requirement.\
+  - need to redo changes of committed transactions\
+  - need to undo changes of non-committed transactions }

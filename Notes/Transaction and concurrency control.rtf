@@ -1,0 +1,124 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2638
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 AmericanTypewriter;\f1\fnil\fcharset0 AmericanTypewriter-Bold;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12200\viewh19040\viewkind1
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Transaction processing model\
+\
+- database: simply a collection of named items.\
+- granularity(size) of these items are 
+\f1\b not 
+\f0\b0 important. \
+\
+Basic operations:\
+- read_item(X)\
+- write_item(X)\
+. . .\
+\
+\
+Initial concepts:\
+\
+Schedule\
+- a sequence of interleaved operations from multiple transactions.\
+\
+Serial Schedule\
+- a schedule is serial if the operations of any transaction is executed directly one after the other .e.g. no interleaving of operations from different transactions.\
+     - characteristics:\
+	- serial schedules trivially guarantee the isolation property\
+	- for n transactions, there are n! serial schedules\
+	- each of them produces a correct result.\
+	- however, not all of them produce the same result for example:\
+	if two people try to reserve the last seat on a plane, only one gets it. The 	serial order determines which one. The two orderings have different results, but either one is correct. \
+\
+	- they are 
+\f1\b not 
+\f0\b0 feasible for performance reasons: \
+		- long transactions force other transactions to wait\
+		- when a transaction is waiting for disk I/O or any other event, system cannot switch to other transaction\
+		- solution: allow some interleaving (without sacrificing correctness!)\
+\
+
+\f1\b Serializability\
+\
+
+\f0\b0 Conflicts:\
+\
+- executing some operations in a different order causes a different outcome. \
+\
+
+\f1\b Conflicts and equivalence:
+\f0\b0 \
+Two operations 
+\f1\b conflict 
+\f0\b0 if:\
+	- they access the same data item X,\
+	- they are from two different transactions, and\
+	- at least one of them is a white operation\
+\
+- Two operations are 
+\f1\b conflict equivalent 
+\f0\b0 if the relative order of any two conflicting operations is the same in both schedules. \
+\
+Serializability: a schedule with n transactions is serializable if it is conflict equivalent to some serial schedule of the same n transactions. \
+\
+- a schedule is serializable if and only if its serialization graph has no cycles. \
+\
+\
+
+\f1\b Database Locks\
+\
+
+\f0\b0 - locks can be used to ensure that conflicting operations cannot occur. \
+- 
+\f1\b exclusive lock 
+\f0\b0 for writing, 
+\f1\b shared lock 
+\f0\b0 for reading\
+	- transaction cannot read item without first getting a shared or an exclusive lock on it.\
+	- transaction cannot write item without first getting exclusive lock on it. \
+	- request for lock may cause transaction to 
+\f1\b block 
+\f0\b0 (wait) because write lock is exclusive.\
+\
+	- blocked transactions are unblocked and granted the requested lock when conflicting transaction release their lock.\
+\
+
+\f1\b Two-Phase locking (2PL)\
+
+\f0\b0 - a transaction follows the two-phase locking protocol if all of its read_lock() and write_lock() operations come before its first unlock() operation. \
+	- a transaction with 2PL protocol has an 
+\f1\b expansion phase 
+\f0\b0 and a 
+\f1\b shrinking phase. 
+\f0\b0 \
+	- if all transactions in a schedule follow the 2PL protocol, then the schedule is serializable. \
+\
+\
+
+\f1\b Deadlock
+\f0\b0 \
+- two or more transactions wait for one another to unlock some data item.\
+\
+- prevention:\
+	- conservative 2PL protocol: wait until you can lock all the data to be used beforehand.\
+	- wait-die\
+	- wound-wait\
+	- no waiting\
+	- cautious waiting\
+\
+- detection:\
+	- wait-for graph\
+	- timeouts\
+\
+
+\f1\b Starvation\
+
+\f0\b0 - a transaction is not executed for an indefinite period of time while other transactions are executed normally e.g. T waits for write lock and other transactions repeatedly grab their read locks before all read locks are released.\
+- prevention:\
+	- first-come-first-served waiting scheme\
+	- wait-die\
+	- wound-wait\
+	- etc.\
+}

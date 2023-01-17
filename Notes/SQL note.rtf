@@ -1,0 +1,141 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2638
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 AmericanTypewriter-Bold;\f1\fnil\fcharset0 AmericanTypewriter;}
+{\colortbl;\red255\green255\blue255;\red103\green103\blue103;\red0\green0\blue255;}
+{\*\expandedcolortbl;;\csgray\c47953;\cssrgb\c1680\c19835\c100000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12260\viewh18940\viewkind1
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 SQL (Structured Query Language)
+\f1\b0 \
+\
+- is a declarative language which describe 
+\f0\b what 
+\f1\b0 you want to achieve instead for 
+\f0\b how.
+\f1\b0 \
+\
+- is both a data definition language(
+\f0\b DDL
+\f1\b0 ) and data manipulation language(
+\f0\b DML
+\f1\b0 ).\
+\
+\
+
+\f0\b SQL Queries\
+\
+- 
+\f1\b0 Retrieving data from an SQL database:\
+- the result of queries is also a table. \
+\
+\
+SELECT <column>\
+FROM <table name>\
+WHERE <condition> \'97\'97\'97> boolean\
+\
+1-  start with the FROM clause,.\
+2- eliminate those rows that do not satisfy the WHERE clause.\
+3- in the remaining row, create a return row with columns for each column name in the SELECT clause. \
+\
+
+\f0\b Removing duplicates\
+
+\f1\b0 Example:\
+\
+List all salaries:\
+\
+SELECT salary\
+FROM employee;\
+\
+\
+List all salaries without duplicates:\
+\
+SELECT \cf2 DISTINCT\cf0  salary\
+FROM EMPLOYEE;\
+\
+
+\f0\b Set Operations
+\f1\b0 \
+Queries can be combined by set operations: UNION, INTERSECT, EXCEPT.\
+\
+
+\f0\b Aliasing\
+
+\f1\b0 Example:\
+\
+SELECT E.Name, D.Name\
+FROM Employee AS E, Department AS D\
+WHERE Dept = DNO;\
+\
+\
+\
+
+\f0\b Aggregate Functions\
+
+\f1\b0 - used to accumulate information from multiple tuples, forming a single-tuple summary. \
+- SUM, MAX, MIN, AVG, CDUNT\
+\
+Example;\
+\
+SELECT AVG(budget) FROM FILM;\
+\
+\
+- used in the SELECT clause and the HAVING clause, so it 
+\f0\b cannot
+\f1\b0  be used in the WHILE clause!\
+\
+\
+
+\f0\b SQL Data Manipulation\
+\
+INSERT Data\
+\
+
+\f1\b0 - INSERT INTO <table> (<attr>, ..) VALUES ( <val>, ..)\
+- INSERT INTO <table> (<attr>, ..) <subquery>;\
+\
+ 
+\f0\b Example
+\f1\b0 : Store information about how many hours an employee works for the project \'911\'92 into WORKS_ON.\
+\
+\cf3 INSERT INTO\cf0  WORKS_ON \cf3 VALUES\cf0  (123456789, 1, 32,5)\
+\
+
+\f0\b UPDATE Data\
+\
+
+\f1\b0 - UPDATE <table> SET <attr> == <val> , ..\
+	WHERE <condition>;\
+- UPDATE <table> SET (<attr>, ..) = (<subquery>)\
+	WHERE <condition>;\
+\
+
+\f0\b Example
+\f1\b0 : Give all employees in the \'91Research\'92 department a 10% raise in salary.\
+\
+\cf3 UPDATE\cf0  EMPLOYEE \
+\cf3 SET\cf0  SALARY = SALARY*1.1\
+\cf3 WHERE\cf0  DNO IN ( \cf3 SELECT\cf0  DNUMBER\
+			      \cf3 FROM\cf0  DEPARTMENT\
+			      \cf3 WHERE\cf0  DNAME = \'91Research\'92)\
+\
+\
+\
+\
+\
+\
+\
+
+\f0\b DELETE Data\
+\
+
+\f1\b0 DELETE FROM <table> WHERE <condition>;\
+\
+
+\f0\b Example
+\f1\b0 : Delete the employees having the last name \'91Borg\'92 from the EMPLOYEE table.\
+\
+DELETE FROM EMPLOYEE\
+WHERE LNAME = \'91Borg\'92;\
+\
+}
